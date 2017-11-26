@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace veganew.Controllers.Resources
 {
-    public class MakeResource
+    public class MakeResource : KeyValuePairResource  // by deriving it from KeyValuePair we get Id and Name properties -> DRY
     {
         public ICollection<KeyValuePairResource> Models { get; set; }
 
