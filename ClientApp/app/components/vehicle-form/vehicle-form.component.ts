@@ -60,18 +60,6 @@ export class VehicleFormComponent implements OnInit {
             showClose: true,
             timeout: 5000 
          });
-        },
-        err => {
-          // if (err.status == 400) {
-
-          // }
-          this.toastyService.error({
-             title: 'Error',
-             msg: 'An unexpected error happened.',
-             theme: 'bootstrap',
-             showClose: true,
-             timeout: 5000 
-          });
         }
       );
   }
