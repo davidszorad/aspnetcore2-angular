@@ -12,7 +12,7 @@ button.btn.btn-primary
 <p>
   {{ vehicle | json }}
 </p>
-<form #f="ngForm" (ngSubmit)="submit()">
+<form #f="ngForm" (ngSubmit)="submit()" novalidate> <!-- novalidate - to supress HTML5 validation messages because we want to handle them in angular -->
   <div class="form-group">
     <label for="make">Make</label>
     <select id="make" class="form-control" name="makeId" (change)="onMakeChange()" [(ngModel)]="vehicle.makeId" required #make="ngModel">
