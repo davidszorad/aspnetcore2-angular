@@ -1,4 +1,4 @@
-import { ErrorHandler, Inject, NgZone } from "@angular/core";
+import { ErrorHandler, Inject, NgZone, isDevMode } from "@angular/core";
 import { ToastyService } from "ng2-toasty";
 
 export class AppErrorHandler implements ErrorHandler {
@@ -24,5 +24,9 @@ export class AppErrorHandler implements ErrorHandler {
                 timeout: 5000 
             });
         });
+
+        if (isDevMode) {
+            console.log('ERROR OCCURED');
+        }
     }
 }
