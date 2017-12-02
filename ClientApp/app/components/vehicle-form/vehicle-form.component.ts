@@ -1,7 +1,11 @@
+import * as _ from 'underscore';
 import { VehicleService } from './../../services/vehicle.service';
 import { Component, OnInit, NgModule } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastyService } from 'ng2-toasty';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/Observable/forkJoin';
+import { SaveVehicle, Vehicle } from '../../models/vehicle';
 
 @Component({
   selector: 'app-vehicle-form',
@@ -12,9 +16,17 @@ export class VehicleFormComponent implements OnInit {
   makes: any[];
   models: any[];
   features: any[];
-  vehicle: any = { 
+  vehicle: SaveVehicle = {
+    id: 0,
+    makeId: 0,
+    modelId: 0,
+    isRegistered: false,
     features: [],
-    contact: {}
+    contact: {
+      name: '',
+      phone: '',
+      email: ''
+    }
   };
 
   constructor(
@@ -26,10 +38,33 @@ export class VehicleFormComponent implements OnInit {
       route.params.subscribe(p => {
         this.vehicle.id = +p['id']; // plus sign converts p['id'] to number
       });
-
     }
 
   ngOnInit() {
+    // Order does not matter as it will go to server in parallel
+    var sources = [
+      this.vehicleService.getMakes(),
+      this.vehicleService.getFeatures(),
+    ];
+    if (this.vehicle.id) {
+      sources.push(this.vehicleService.getVehicle(this.vehicle.id));
+    }
+    
+    Observable.forkJoin(sources)
+      .subscribe(data => {
+        this.makes = data[0];
+        this.features = data[1];
+        if (this.vehicle.id) {
+          this.setVehicle(data[2]);
+          this.populateModels();
+        }
+      }, err => {
+        if (err.status == 404) {
+          this.router.navigate(['/home']);
+        }
+      });
+    
+    /*
     if (this.vehicle.id) {
       this.vehicleService.getVehicle(this.vehicle.id)
         .subscribe(v => {
@@ -40,12 +75,11 @@ export class VehicleFormComponent implements OnInit {
           }
         });
     }
-
     this.vehicleService.getMakes()
       .subscribe(makes => this.makes = makes);
-    
     this.vehicleService.getFeatures()
       .subscribe(features => this.features = features);
+    */
   }
 
   /*
@@ -60,9 +94,13 @@ export class VehicleFormComponent implements OnInit {
   */
 
   onMakeChange() {
+    this.populateModels();
+    delete this.vehicle.modelId;
+  }
+
+  private populateModels() {
     var selectedMake = this.makes.find(m => m.id == this.vehicle.makeId);
     this.models = selectedMake ? selectedMake.models : [];
-    delete this.vehicle.modelId;
   }
 
   onFeatureToggle(featureId: any, $event: any) {
@@ -87,5 +125,15 @@ export class VehicleFormComponent implements OnInit {
          });
         }
       );
+  }
+
+  private setVehicle(v: Vehicle) {
+    this.vehicle.id = v.id,
+    this.vehicle.makeId = v.make.id;
+    this.vehicle.modelId = v.model.id;
+    this.vehicle.isRegistered = v.isRegistered;
+    this.vehicle.contact = v.contact;
+    //this.vehicle.features = v.features; --> not working because we need to do mapping here -> solution: npm install underscore and npm install @types/underscore (map from array of keyvaluepairs to array of numbers) -> then in webpack.config.vendor.js add underscore
+    this.vehicle.features = _.pluck(v.features, 'id');
   }
 }
