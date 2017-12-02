@@ -26,7 +26,7 @@ export class AppErrorHandler implements ErrorHandler {
         });
 
         if (isDevMode) {
-            console.log('ERROR OCCURED');
+            console.log('ERROR OCCURED', error);
         }
     }
 }
