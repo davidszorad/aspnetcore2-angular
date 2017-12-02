@@ -7,6 +7,11 @@ export class VehicleService {
 
   constructor(private http: Http) { }
 
+  getVehicle(id: any) {
+    return this.http.get('/api/vehicles/' + id)
+      .map(res => res.json());
+  }
+  
   getMakes() {
     let bla1 = this.http.get('/api/makes');
     let bla2 = bla1.map(res => res.json());
