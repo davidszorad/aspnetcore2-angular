@@ -32,11 +32,19 @@ export class VehicleListComponent implements OnInit {
 
   private populateVehicles() {
     this.vehicleService.getVehicles()
-      .subscribe(vehicles => this.vehicles = vehicles);
+      .subscribe(vehicles => this.vehicles = this.allVehicles = vehicles);
   }
 
   onFilterChange() {
+    var vehicles = this.allVehicles;
 
+    if (this.filter.makeId)
+      vehicles = vehicles.filter(v => v.make.id == this.filter.makeId);
+
+    if (this.filter.modelId)
+      vehicles = vehicles.filter(v => v.model.id == this.filter.modelId);
+
+    this.vehicles = vehicles;
   }
 
 }
