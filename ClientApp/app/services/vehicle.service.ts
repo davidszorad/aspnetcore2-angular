@@ -2,14 +2,22 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { SaveVehicle } from '../models/vehicle';
+import { validateConfig } from '@angular/router/src/config';
+import { HelpersService } from './helpers.service';
 
 @Injectable()
 export class VehicleService {
+  private readonly vehicleEndpoint = '/api/vehicles';
 
-  constructor(private http: Http) { }
+  constructor(private http: Http, private helpersService: HelpersService) { }
 
   getVehicle(id: any) {
-    return this.http.get('/api/vehicles/' + id)
+    return this.http.get(this.vehicleEndpoint + '/' + id)
+      .map(res => res.json());
+  }
+
+  getVehicles(filter: any) {
+    return this.http.get('/api/vehicles' + '?' + this.helpersService.toQueryString(filter))
       .map(res => res.json());
   }
   
@@ -27,17 +35,17 @@ export class VehicleService {
   }
 
   create(vehicle: SaveVehicle) {
-    return this.http.post('/api/vehicles', vehicle)
+    return this.http.post(this.vehicleEndpoint, vehicle)
       .map(res => res.json());
   }
 
   update(vehicle: SaveVehicle) {
-    return this.http.put('/api/vehicles/' + vehicle.id, vehicle)
+    return this.http.put(this.vehicleEndpoint + '/' + vehicle.id, vehicle)
       .map(res => res.json());
   }
 
   delete(id: number) {
-    return this.http.delete('/api/vehicles/' + id)
+    return this.http.delete(this.vehicleEndpoint + '/' + id)
       .map(res => res.json());
   }
 
