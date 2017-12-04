@@ -56,7 +56,7 @@ namespace veganew.Controllers
                 return BadRequest(ModelState);
             }
 
-            /*
+            /* endpoint should know - we don't have to do this extra work
             var model = await context.Models.FindAsync(vehicleResource.ModelId);
             if (model == null)
             {
