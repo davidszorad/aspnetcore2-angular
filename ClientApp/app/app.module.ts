@@ -13,6 +13,7 @@ import { CounterComponent } from './components/counter/counter.component';
 import { VehicleFormComponent } from './components/vehicle-form/vehicle-form.component';
 import { VehicleService } from './services/vehicle.service';
 import { VehicleListComponent } from './components/vehicle-list/vehicle-list.component';
+import { HelpersService } from './services/helpers.service';
 
 @NgModule({
     declarations: [
@@ -41,7 +42,8 @@ import { VehicleListComponent } from './components/vehicle-list/vehicle-list.com
         ])
     ],
     providers: [
-        VehicleService
+        VehicleService,
+        HelpersService
     ]
 })
 export class AppModuleShared {

@@ -10,7 +10,7 @@ import { KeyValuePair } from '../../models/keyvaluepair';
 })
 export class VehicleListComponent implements OnInit {
   vehicles: Vehicle[];
-  allVehicles: Vehicle[];
+  //allVehicles: Vehicle[];  //removed because we do filtering on server
   makes: KeyValuePair[];
   filter: any = {};
   columns = [
@@ -31,11 +31,12 @@ export class VehicleListComponent implements OnInit {
   }
 
   private populateVehicles() {
-    this.vehicleService.getVehicles()
-      .subscribe(vehicles => this.vehicles = this.allVehicles = vehicles);
+    this.vehicleService.getVehicles(this.filter)
+      .subscribe(vehicles => this.vehicles /* = this.allVehicles */ = vehicles);
   }
 
   onFilterChange() {
+    /*
     var vehicles = this.allVehicles;
 
     if (this.filter.makeId)
@@ -45,6 +46,9 @@ export class VehicleListComponent implements OnInit {
       vehicles = vehicles.filter(v => v.model.id == this.filter.modelId);
 
     this.vehicles = vehicles;
+    */
+
+    this.populateVehicles();
   }
 
   resetFilter() {
