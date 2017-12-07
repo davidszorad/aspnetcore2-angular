@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using veganew.Core;
 using veganew.Core.Models;
+using veganew.Extensions;
 
 namespace veganew.Persistance
 {
@@ -32,6 +33,7 @@ namespace veganew.Persistance
                 .SingleOrDefaultAsync(v => v.Id == id);
         }
 
+        /// http://localhost:5000/api/vehicles?sortBy=contactName&isSortAscending=true
         public async Task<IEnumerable<Vehicle>> GetVehicles(VehicleQuery queryObj)
         {
             var query = context.Vehicles
@@ -60,13 +62,13 @@ namespace veganew.Persistance
             {
                 ["make"] = v => v.Model.Make.Name,
                 ["model"] = v => v.Model.Name,
-                ["contactName"] = v => v.ContactName,
-                ["id"] = v => v.Id
+                ["contactName"] = v => v.ContactName
             };
 
-            query = ApplyOrdering(queryObj, query, columnsMap);
+            // query = ApplyOrdering(queryObj, query, columnsMap);
+            query = query.ApplyOrdering(queryObj, columnsMap);
 
-            return await query.ToListAsync();
+            return await query.ToListAsync();            
         }
 
         public void Add(Vehicle vehicle)

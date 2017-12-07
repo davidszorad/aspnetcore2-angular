@@ -1,6 +1,8 @@
+using veganew.Extensions;
+
 namespace veganew.Core.Models
 {
-    public class VehicleQuery
+    public class VehicleQuery : IQueryObject
     {
         public int? MakeId { get; set; }
         public int? ModelId { get; set; }
