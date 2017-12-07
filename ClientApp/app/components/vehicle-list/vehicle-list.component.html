@@ -16,14 +16,22 @@
   <thead>
     <tr>
       <th *ngFor="let c of columns">
-        <div (click)="sortBy(c.key)">
-          {{ c.title }}
-          <i *ngIf="query.sortBy === c.key" 
-            class="fa"
-            [class.fa-sort-asc]="query.isSortAscending"
-            [class.fa-sort-desc]="!query.isSortAscending"
-          ></i>
-        </div>
+        <div *ngIf="c.isSortable; then sortable else notSortable"></div>
+        <ng-template #sortable>
+          <div (click)="sortBy(c.key)">
+            {{ c.title }}
+            <i *ngIf="query.sortBy === c.key" 
+              class="fa"
+              [class.fa-sort-asc]="query.isSortAscending"
+              [class.fa-sort-desc]="!query.isSortAscending"
+            ></i>
+          </div>
+        </ng-template>
+        <ng-template #notSortable>
+          <div>
+              {{ c.title }}
+          </div>
+        </ng-template>
       </th>
     </tr>
   </thead>
