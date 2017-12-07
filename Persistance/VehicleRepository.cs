@@ -64,10 +64,27 @@ namespace veganew.Persistance
                 ["id"] = v => v.Id
             };
 
+            query = ApplyOrdering(queryObj, query, columnsMap);
+
+            return await query.ToListAsync();
+        }
+
+        public void Add(Vehicle vehicle)
+        {
+            context.Vehicles.Add(vehicle);
+        }
+
+        public void Remove(Vehicle vehicle)
+        {
+            context.Remove(vehicle);
+        }
+
+        private IQueryable<Vehicle> ApplyOrdering(VehicleQuery queryObj, IQueryable<Vehicle> query, Dictionary<string, Expression<Func<Vehicle, object>>> columnsMap)
+        {
             if (queryObj.IsSortAscending)
-                query = query.OrderBy(columnsMap[queryObj.SortBy]);
+                return query.OrderBy(columnsMap[queryObj.SortBy]);
             else
-                query = query.OrderByDescending(columnsMap[queryObj.SortBy]);
+                return query.OrderByDescending(columnsMap[queryObj.SortBy]);
 
             // if (queryObj.SortBy == "make") {
             //     query = (queryObj.IsSortAscending) ? query.OrderBy(v => v.Model.Make.Name) : query.OrderByDescending(v => v.Model.Make.Name);
@@ -81,18 +98,6 @@ namespace veganew.Persistance
             // if (queryObj.SortBy == "id") {
             //     query = (queryObj.IsSortAscending) ? query.OrderBy(v => v.Id) : query.OrderByDescending(v => v.Id);
             // }
-
-            return await query.ToListAsync();
-        }
-
-        public void Add(Vehicle vehicle)
-        {
-            context.Vehicles.Add(vehicle);
-        }
-
-        public void Remove(Vehicle vehicle)
-        {
-            context.Remove(vehicle);
         }
     }
 }
