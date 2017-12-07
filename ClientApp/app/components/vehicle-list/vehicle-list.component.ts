@@ -12,7 +12,7 @@ export class VehicleListComponent implements OnInit {
   vehicles: Vehicle[];
   //allVehicles: Vehicle[];  //removed because we do filtering on server
   makes: KeyValuePair[];
-  filter: any = {};
+  query: any = {};
   columns = [
     { title: 'Id' },
     { title: 'Make', key: 'make', isSortable: true },
@@ -31,7 +31,7 @@ export class VehicleListComponent implements OnInit {
   }
 
   private populateVehicles() {
-    this.vehicleService.getVehicles(this.filter)
+    this.vehicleService.getVehicles(this.query)
       .subscribe(vehicles => this.vehicles /* = this.allVehicles */ = vehicles);
   }
 
@@ -52,8 +52,18 @@ export class VehicleListComponent implements OnInit {
   }
 
   resetFilter() {
-    this.filter = {};
+    this.query = {};
     this.onFilterChange();
+  }
+
+  sortBy(columnName: string) {
+    if (this.query.sortBy === columnName) {
+      this.query.isSortAscending = !this.query.isSortAscending;
+    } else {
+      this.query.sortBy = columnName;
+      this.query.isSortAscending = true;
+    }
+    this.populateVehicles();
   }
 
 }
