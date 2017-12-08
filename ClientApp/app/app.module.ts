@@ -14,6 +14,7 @@ import { VehicleFormComponent } from './components/vehicle-form/vehicle-form.com
 import { VehicleService } from './services/vehicle.service';
 import { VehicleListComponent } from './components/vehicle-list/vehicle-list.component';
 import { HelpersService } from './services/helpers.service';
+import { PaginationComponent } from './components/shared/pagination/pagination.component';
 
 @NgModule({
     declarations: [
@@ -23,7 +24,8 @@ import { HelpersService } from './services/helpers.service';
         FetchDataComponent,
         HomeComponent,
         VehicleFormComponent,
-        VehicleListComponent
+        VehicleListComponent,
+        PaginationComponent
     ],
     imports: [
         CommonModule,

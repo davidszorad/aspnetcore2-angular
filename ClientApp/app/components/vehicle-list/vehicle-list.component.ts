@@ -12,7 +12,9 @@ export class VehicleListComponent implements OnInit {
   vehicles: Vehicle[];
   //allVehicles: Vehicle[];  //removed because we do filtering on server
   makes: KeyValuePair[];
-  query: any = {};
+  query: any = {
+    pageSize: 2
+  };
   columns = [
     { title: 'Id' },
     { title: 'Make', key: 'make', isSortable: true },
@@ -48,6 +50,11 @@ export class VehicleListComponent implements OnInit {
     this.vehicles = vehicles;
     */
 
+    this.populateVehicles();
+  }
+
+  onPageChange(page: number) {
+    this.query.page = page;
     this.populateVehicles();
   }
 
