@@ -68,7 +68,8 @@ namespace veganew.Persistance
             // query = ApplyOrdering(queryObj, query, columnsMap);
             query = query.ApplyOrdering(queryObj, columnsMap);
 
-            query = query.Skip((queryObj.Page - 1) * queryObj.PageSize).Take(queryObj.PageSize);  // Paging is done in SQL server not in memory
+            // query = query.Skip((queryObj.Page - 1) * queryObj.PageSize).Take(queryObj.PageSize);  // Paging is done in SQL server not in memory
+            query = query.ApplyPaging(queryObj);
 
             return await query.ToListAsync();            
         }
