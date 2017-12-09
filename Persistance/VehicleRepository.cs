@@ -34,8 +34,10 @@ namespace veganew.Persistance
         }
 
         /// http://localhost:5000/api/vehicles?sortBy=contactName&isSortAscending=true
-        public async Task<IEnumerable<Vehicle>> GetVehicles(VehicleQuery queryObj)
+        public async Task<QueryResult <Vehicle>> GetVehicles(VehicleQuery queryObj)
         {
+            var result = new QueryResult<Vehicle>();
+            
             var query = context.Vehicles
                 .Include(v => v.Model)
                     .ThenInclude(m => m.Make)
@@ -68,7 +70,14 @@ namespace veganew.Persistance
             // query = ApplyOrdering(queryObj, query, columnsMap);
             query = query.ApplyOrdering(queryObj, columnsMap);
 
-            return await query.ToListAsync();            
+            result.TotalItems = await query.CountAsync();
+
+            // query = query.Skip((queryObj.Page - 1) * queryObj.PageSize).Take(queryObj.PageSize);  // Paging is done in SQL server not in memory
+            query = query.ApplyPaging(queryObj);
+
+            result.Items = await query.ToListAsync();
+
+            return result;
         }
 
         public void Add(Vehicle vehicle)

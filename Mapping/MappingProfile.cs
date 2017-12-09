@@ -10,10 +10,11 @@ namespace veganew.Mapping
         public MappingProfile()
         {
             // Domain to API Resource
+            CreateMap<Feature, KeyValuePairResource>();
             CreateMap<Make, MakeResource>();
             CreateMap<Make, KeyValuePairResource>();
             CreateMap<Model, KeyValuePairResource>();
-            CreateMap<Feature, KeyValuePairResource>();
+            CreateMap(typeof(QueryResult<>), typeof(QueryResultResource<>));  // Mapping for generic types
             CreateMap<Vehicle, SaveVehicleResource>()
                 .ForMember(vr => vr.Contact, opt => opt.MapFrom(v => new ContactResource { Name = v.ContactName, Email = v.ContactEmail, Phone = v.ContactPhone }))
                 .ForMember(vr => vr.Features, opt => opt.MapFrom(v => v.Features.Select(vf => vf.FeatureId)));

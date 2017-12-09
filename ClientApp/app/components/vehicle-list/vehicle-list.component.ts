@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Vehicle } from '../../models/vehicle';
 import { VehicleService } from '../../services/vehicle.service';
 import { KeyValuePair } from '../../models/keyvaluepair';
+import { resetFakeAsyncZone } from '@angular/core/testing';
 
 @Component({
   selector: 'app-vehicle-list',
@@ -9,10 +10,15 @@ import { KeyValuePair } from '../../models/keyvaluepair';
   styleUrls: ['./vehicle-list.component.css']
 })
 export class VehicleListComponent implements OnInit {
-  vehicles: Vehicle[];
+  private readonly PAGE_SIZE = 2;
+  //vehicles: Vehicle[];
+  //totalItems: number;
   //allVehicles: Vehicle[];  //removed because we do filtering on server
+  queryResult: any = {};
   makes: KeyValuePair[];
-  query: any = {};
+  query: any = {
+    pageSize: this.PAGE_SIZE
+  };
   columns = [
     { title: 'Id' },
     { title: 'Make', key: 'make', isSortable: true },
@@ -32,7 +38,12 @@ export class VehicleListComponent implements OnInit {
 
   private populateVehicles() {
     this.vehicleService.getVehicles(this.query)
-      .subscribe(vehicles => this.vehicles /* = this.allVehicles */ = vehicles);
+      // .subscribe(vehicles => this.vehicles /* = this.allVehicles */ = vehicles);
+      // .subscribe(result => {
+      //   this.vehicles = result.items;
+      //   this.totalItems = result.totalItems;
+      // });
+      .subscribe(result => this.queryResult = result);
   }
 
   onFilterChange() {
@@ -47,13 +58,21 @@ export class VehicleListComponent implements OnInit {
 
     this.vehicles = vehicles;
     */
+    this.query.page = 1;
+    this.populateVehicles();
+  }
 
+  onPageChange(page: number) {
+    this.query.page = page;
     this.populateVehicles();
   }
 
   resetFilter() {
-    this.query = {};
-    this.onFilterChange();
+    this.query = {
+      page: 1,
+      pageSize: this.PAGE_SIZE
+    };
+    this.populateVehicles();
   }
 
   sortBy(columnName: string) {
