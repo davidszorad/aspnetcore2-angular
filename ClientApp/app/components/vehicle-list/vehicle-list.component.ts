@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Vehicle } from '../../models/vehicle';
 import { VehicleService } from '../../services/vehicle.service';
 import { KeyValuePair } from '../../models/keyvaluepair';
+import { resetFakeAsyncZone } from '@angular/core/testing';
 
 @Component({
   selector: 'app-vehicle-list',
@@ -9,8 +10,10 @@ import { KeyValuePair } from '../../models/keyvaluepair';
   styleUrls: ['./vehicle-list.component.css']
 })
 export class VehicleListComponent implements OnInit {
-  vehicles: Vehicle[];
+  //vehicles: Vehicle[];
+  //totalItems: number;
   //allVehicles: Vehicle[];  //removed because we do filtering on server
+  queryResult: any = {};
   makes: KeyValuePair[];
   query: any = {
     pageSize: 2
@@ -34,7 +37,12 @@ export class VehicleListComponent implements OnInit {
 
   private populateVehicles() {
     this.vehicleService.getVehicles(this.query)
-      .subscribe(vehicles => this.vehicles /* = this.allVehicles */ = vehicles);
+      // .subscribe(vehicles => this.vehicles /* = this.allVehicles */ = vehicles);
+      // .subscribe(result => {
+      //   this.vehicles = result.items;
+      //   this.totalItems = result.totalItems;
+      // });
+      .subscribe(result => this.queryResult = result);
   }
 
   onFilterChange() {
