@@ -15,6 +15,7 @@ import { VehicleService } from './services/vehicle.service';
 import { VehicleListComponent } from './components/vehicle-list/vehicle-list.component';
 import { HelpersService } from './services/helpers.service';
 import { PaginationComponent } from './components/shared/pagination/pagination.component';
+import { ViewVehicleComponent } from './components/view-vehicle/view-vehicle.component';
 
 @NgModule({
     declarations: [
@@ -25,7 +26,8 @@ import { PaginationComponent } from './components/shared/pagination/pagination.c
         HomeComponent,
         VehicleFormComponent,
         VehicleListComponent,
-        PaginationComponent
+        PaginationComponent,
+        ViewVehicleComponent
     ],
     imports: [
         CommonModule,
@@ -38,7 +40,8 @@ import { PaginationComponent } from './components/shared/pagination/pagination.c
             { path: 'counter', component: CounterComponent },
             { path: 'fetch-data', component: FetchDataComponent },
             { path: 'vehicles/new', component: VehicleFormComponent },
-            { path: 'vehicles/:id', component: VehicleFormComponent },
+            { path: 'vehicles/edit/:id', component: VehicleFormComponent },
+            { path: 'vehicles/:id', component: ViewVehicleComponent },
             { path: 'vehicles', component: VehicleListComponent },
             { path: '**', redirectTo: 'home' }
         ])

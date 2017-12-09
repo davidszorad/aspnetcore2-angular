@@ -36,7 +36,7 @@ export class VehicleFormComponent implements OnInit {
     private toastyService: ToastyService) { 
 
       route.params.subscribe(p => {
-        this.vehicle.id = +p['id']; // plus sign converts p['id'] to number
+        this.vehicle.id = +p['id'] || 0; // plus sign converts p['id'] to number && 0 in OR statement is because in case of creating a new vehicle we need to set ID value othervise if the value is null the server responds with an error
       });
     }
 
@@ -112,34 +112,48 @@ export class VehicleFormComponent implements OnInit {
     }
   }
 
+  // submit() {
+  //   if (this.vehicle.id) {
+  //     this.vehicleService.update(this.vehicle)
+  //       .subscribe(
+  //         x => {
+  //           this.toastyService.success({
+  //             title: 'Success',
+  //             msg: `Vehicle with ID: ${this.vehicle.id} was updated.`,
+  //             theme: 'bootstrap',
+  //             showClose: true,
+  //             timeout: 5000 
+  //         });
+  //         }
+  //       );
+  //   } else {
+  //     this.vehicleService.create(this.vehicle)
+  //       .subscribe(
+  //         x => {
+  //           this.toastyService.success({
+  //             title: 'Success',
+  //             msg: 'New vehicle created.',
+  //             theme: 'bootstrap',
+  //             showClose: true,
+  //             timeout: 5000 
+  //         });
+  //         }
+  //       );
+  //   }
+  // }
+
   submit() {
-    if (this.vehicle.id) {
-      this.vehicleService.update(this.vehicle)
-        .subscribe(
-          x => {
-            this.toastyService.success({
-              title: 'Success',
-              msg: `Vehicle with ID: ${this.vehicle.id} was updated.`,
-              theme: 'bootstrap',
-              showClose: true,
-              timeout: 5000 
-          });
-          }
-        );
-    } else {
-      this.vehicleService.create(this.vehicle)
-        .subscribe(
-          x => {
-            this.toastyService.success({
-              title: 'Success',
-              msg: 'New vehicle created.',
-              theme: 'bootstrap',
-              showClose: true,
-              timeout: 5000 
-          });
-          }
-        );
-    }
+    var result$ = (this.vehicle.id) ? this.vehicleService.update(this.vehicle) : this.vehicleService.create(this.vehicle); // result$ is observable (adding $ is a practise for indicating that this is an observable)
+    result$.subscribe(vehicle => {
+      this.toastyService.success({
+        title: 'Success', 
+        msg: 'Data was sucessfully saved.',
+        theme: 'bootstrap',
+        showClose: true,
+        timeout: 5000
+      });
+      this.router.navigate(['/vehicles/', vehicle.id])
+    });
   }
 
   delete() {
