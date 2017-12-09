@@ -10,13 +10,14 @@ import { resetFakeAsyncZone } from '@angular/core/testing';
   styleUrls: ['./vehicle-list.component.css']
 })
 export class VehicleListComponent implements OnInit {
+  private readonly PAGE_SIZE = 2;
   //vehicles: Vehicle[];
   //totalItems: number;
   //allVehicles: Vehicle[];  //removed because we do filtering on server
   queryResult: any = {};
   makes: KeyValuePair[];
   query: any = {
-    pageSize: 2
+    pageSize: this.PAGE_SIZE
   };
   columns = [
     { title: 'Id' },
@@ -57,7 +58,7 @@ export class VehicleListComponent implements OnInit {
 
     this.vehicles = vehicles;
     */
-
+    this.query.page = 1;
     this.populateVehicles();
   }
 
@@ -67,8 +68,11 @@ export class VehicleListComponent implements OnInit {
   }
 
   resetFilter() {
-    this.query = {};
-    this.onFilterChange();
+    this.query = {
+      page: 1,
+      pageSize: this.PAGE_SIZE
+    };
+    this.populateVehicles();
   }
 
   sortBy(columnName: string) {
