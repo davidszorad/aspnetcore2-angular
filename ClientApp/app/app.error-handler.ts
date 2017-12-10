@@ -25,8 +25,11 @@ export class AppErrorHandler implements ErrorHandler {
             });
         });
 
-        if (isDevMode) {
+        if (!isDevMode) {
+            // some custom error logging
+        } else {
             console.log('ERROR OCCURED', error);
+            //throw error;  // in this case it works without it but it may be helpful sometime
         }
     }
 }

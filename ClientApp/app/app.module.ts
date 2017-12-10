@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpModule, BrowserXhr } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { ToastyModule } from 'ng2-toasty';
 
@@ -15,6 +15,9 @@ import { VehicleService } from './services/vehicle.service';
 import { VehicleListComponent } from './components/vehicle-list/vehicle-list.component';
 import { HelpersService } from './services/helpers.service';
 import { PaginationComponent } from './components/shared/pagination/pagination.component';
+import { ViewVehicleComponent } from './components/view-vehicle/view-vehicle.component';
+import { PhotoService } from './services/photo.service';
+import { ProgressService, BrowserXhrWithProgressService } from './services/progress.service';
 
 @NgModule({
     declarations: [
@@ -25,7 +28,8 @@ import { PaginationComponent } from './components/shared/pagination/pagination.c
         HomeComponent,
         VehicleFormComponent,
         VehicleListComponent,
-        PaginationComponent
+        PaginationComponent,
+        ViewVehicleComponent
     ],
     imports: [
         CommonModule,
@@ -38,14 +42,18 @@ import { PaginationComponent } from './components/shared/pagination/pagination.c
             { path: 'counter', component: CounterComponent },
             { path: 'fetch-data', component: FetchDataComponent },
             { path: 'vehicles/new', component: VehicleFormComponent },
-            { path: 'vehicles/:id', component: VehicleFormComponent },
+            { path: 'vehicles/edit/:id', component: VehicleFormComponent },
+            { path: 'vehicles/:id', component: ViewVehicleComponent },
             { path: 'vehicles', component: VehicleListComponent },
             { path: '**', redirectTo: 'home' }
         ])
     ],
     providers: [
-        VehicleService,
-        HelpersService
+        { provide: BrowserXhr, useClass: BrowserXhrWithProgressService },
+        HelpersService,
+        PhotoService,
+        ProgressService,
+        VehicleService
     ]
 })
 export class AppModuleShared {
