@@ -16,6 +16,7 @@ import { VehicleListComponent } from './components/vehicle-list/vehicle-list.com
 import { HelpersService } from './services/helpers.service';
 import { PaginationComponent } from './components/shared/pagination/pagination.component';
 import { ViewVehicleComponent } from './components/view-vehicle/view-vehicle.component';
+import { PhotoService } from './services/photo.service';
 
 @NgModule({
     declarations: [
@@ -47,8 +48,9 @@ import { ViewVehicleComponent } from './components/view-vehicle/view-vehicle.com
         ])
     ],
     providers: [
-        VehicleService,
-        HelpersService
+        HelpersService,
+        PhotoService,
+        VehicleService
     ]
 })
 export class AppModuleShared {

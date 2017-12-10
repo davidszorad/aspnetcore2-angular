@@ -29,6 +29,7 @@ namespace veganew
         {
             services.Configure<PhotoSettings>(Configuration.GetSection("PhotoSettings"));
             
+            services.AddScoped<IPhotoRepository, PhotoRepository>();
             services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             
