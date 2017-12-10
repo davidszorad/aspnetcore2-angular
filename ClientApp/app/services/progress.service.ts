@@ -20,19 +20,23 @@ export class ProgressService {
   }
 
   uploadNotify(progress: any) {
-    this.uploadProgress.next(progress);
+    if (this.uploadProgress)
+      this.uploadProgress.next(progress);
   }
 
   downloadNotify(progress: any) {
-    this.downloadProgress.next(progress);
+    if (this.downloadProgress)
+      this.downloadProgress.next(progress);
   }
 
   endTrackingUploadProgress() {
-    this.uploadProgress.complete();
+    if (this.uploadProgress)
+      this.uploadProgress.complete();
   }
 
   endTrackingDownloadProgress() {
-    this.downloadProgress.complete();
+    if (this.downloadProgress)  
+      this.downloadProgress.complete();
   }
 
   constructor() { }
