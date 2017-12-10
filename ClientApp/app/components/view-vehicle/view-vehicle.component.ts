@@ -60,7 +60,7 @@ export class ViewVehicleComponent implements OnInit {
   uploadPhoto() {
     var nativeElement: HTMLInputElement = this.fileInput.nativeElement;
 
-    this.progressService.uploadProgress
+    this.progressService.startTrackingUploadProgress()  //.uploadProgress // we can assign it to some variable e.g. subscription and then e.g. when displaying photo this.photos.push(photo) call this.subscription.unsubscribe -> but better way is to handle it in progress.service
       .subscribe(progress => {
         console.log(progress);
         // we need to run it inside zone because otherwise angular won't know about the progress state as it is async operation -> one of: browser events/handlers; AJAX requests; timer functions (setTimeout, setInterval)

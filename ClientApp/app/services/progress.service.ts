@@ -4,8 +4,36 @@ import { BrowserXhr } from '@angular/http';
 
 @Injectable()
 export class ProgressService {
-  uploadProgress: Subject<any> = new Subject();
-  downloadProgress: Subject<any> = new Subject();
+  // uploadProgress: Subject<any> = new Subject(); // because we call this.service.uploadProgress.complete() we need to reinitialize that property
+  // downloadProgress: Subject<any> = new Subject();
+  private uploadProgress: Subject<any>;
+  private downloadProgress: Subject<any>;
+
+  startTrackingUploadProgress() {
+    this.uploadProgress = new Subject();
+    return this.uploadProgress;
+  }
+
+  startTrackingDownloadProgress() {
+    this.downloadProgress = new Subject();
+    return this.downloadProgress;
+  }
+
+  uploadNotify(progress: any) {
+    this.uploadProgress.next(progress);
+  }
+
+  downloadNotify(progress: any) {
+    this.downloadProgress.next(progress);
+  }
+
+  endTrackingUploadProgress() {
+    this.uploadProgress.complete();
+  }
+
+  endTrackingDownloadProgress() {
+    this.downloadProgress.complete();
+  }
 
   constructor() { }
 
@@ -29,7 +57,12 @@ export class BrowserXhrWithProgressService extends BrowserXhr {
       //   total: event.total,
       //   percentage: Math.round(event.loaded / event.loaded * 100)
       // });
-      this.service.downloadProgress.next(this.createProgress(event));
+      this.service.downloadNotify(this.createProgress(event));
+    };
+
+    xhr.onloadend = () => {
+      // this.service.downloadProgress.complete();
+      this.service.endTrackingDownloadProgress();
     };
 
     xhr.upload.onprogress = (event) => {
@@ -37,7 +70,15 @@ export class BrowserXhrWithProgressService extends BrowserXhr {
       //   total: event.total,
       //   percentage: Math.round(event.loaded / event.loaded * 100)
       // });
-      this.service.uploadProgress.next(this.createProgress(event));
+      // this.service.uploadProgress.next(this.createProgress(event));
+      this.service.uploadNotify(this.createProgress(event));
+    };
+
+    xhr.upload.onloadend = () => {
+      // console.log("BEFORE", this.service.uploadProgress);  // 1 observer
+      // this.service.uploadProgress.complete();  // Better way than -> from view-vehicle.component.ts: we can assign it to some variable e.g. subscription and then e.g. when displaying photo this.photos.push(photo) call this.subscription.unsubscribe -> but better way is to handle it in progress.service
+      // console.log("AFTER", this.service.uploadProgress);  // 0 observer ... if we did not call this.service.uploadProgress.complete() we would have the next time the method will be called 2 observers 
+      this.service.endTrackingUploadProgress();
     };
     
     return xhr;
