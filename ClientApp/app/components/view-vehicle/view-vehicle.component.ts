@@ -58,8 +58,6 @@ export class ViewVehicleComponent implements OnInit {
   }
 
   uploadPhoto() {
-    var nativeElement: HTMLInputElement = this.fileInput.nativeElement;
-
     this.progressService.startTrackingUploadProgress()  //.uploadProgress // we can assign it to some variable e.g. subscription and then e.g. when displaying photo this.photos.push(photo) call this.subscription.unsubscribe -> but better way is to handle it in progress.service
       .subscribe(progress => {
         console.log(progress);
@@ -71,10 +69,23 @@ export class ViewVehicleComponent implements OnInit {
       undefined, 
       () => { this.progress = null; });
 
+    var nativeElement: HTMLInputElement = this.fileInput.nativeElement;
     if (nativeElement.files) {
-      this.photoService.upload(this.vehicleId, nativeElement.files[0])
+      var file = nativeElement.files[0];
+      nativeElement.value = '';
+      this.photoService.upload(this.vehicleId, file)
         .subscribe(photo => {
           this.photos.push(photo);
+        },
+        err => {
+          console.log(err);
+          this.toasty.error({
+            title: 'Error',
+            msg: err.text(),
+            theme: 'bootstrap',
+            showClose: true,
+            timeout: 5000 
+          });
         });
     }
   }

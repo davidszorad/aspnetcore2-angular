@@ -52,6 +52,7 @@ namespace veganew.Controllers
         }
         
         [HttpPost]
+        [RequestSizeLimit(100_000_000)] //default 30 MB (~28.6 MiB) max request body size limit -- https://github.com/aspnet/Announcements/issues/267
         public async Task<IActionResult> Upload(int vehicleId, IFormFile file) // for multiple files IFromCollection
         {
             var vehicle = await vehicleRepository.GetVehicle(vehicleId, includeRelated: false);
