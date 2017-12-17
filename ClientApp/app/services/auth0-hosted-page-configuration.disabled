@@ -38,7 +38,9 @@
       auth: {
         redirectUrl: config.callbackURL,
         responseType: 'token id_token',
-        params: config.internalOptions
+        params: {
+          audience: "http://api.vega.com"
+        }
       },
       assetsUrl:  config.assetsUrl,
       allowedConnections: connection ? [connection] : null,
