@@ -62,3 +62,21 @@
   </script>
 </body>
 </html>
+
+<!--
+Let me clarify something about the scope. 
+
+As I explained, when we set the audience property, Auth0 behaves in OIDC (OpenID Connect) compliant mode. In this mode, by default the scope is set to "openid". 
+
+The scope property determines what information (claims) we can access with this token. When the value of scope is "openid", that means we can get only the user's ID. 
+
+In the last lecture, we explicitly set the scope to "openid email". This means, in addition to the user's ID, we would like to access the user's email as well. This is the reason why we got the consent dialog for the second time. This dialog asked the user if we can access their email or not. 
+
+OpenID declares a set of standard claims that we can set as the value of the scope property. 
+
+https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims
+
+In a larger application, we can also define custom claims: 
+
+https://auth0.com/docs/scopes/current
+-->
