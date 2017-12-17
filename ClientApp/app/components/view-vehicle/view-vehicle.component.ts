@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PhotoService } from '../../services/photo.service';
 import { ProgressService, BrowserXhrWithProgressService } from '../../services/progress.service';
 import { BrowserXhr } from '@angular/http';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   templateUrl: 'view-vehicle.component.html',
@@ -21,7 +22,8 @@ export class ViewVehicleComponent implements OnInit {
   vehicleId: number; 
 
   constructor(
-    private route: ActivatedRoute, 
+    private route: ActivatedRoute,
+    private auth: AuthService,
     private router: Router,
     private photoService: PhotoService,
     private progressService: ProgressService,

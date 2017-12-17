@@ -3,6 +3,7 @@ import { Vehicle } from '../../models/vehicle';
 import { VehicleService } from '../../services/vehicle.service';
 import { KeyValuePair } from '../../models/keyvaluepair';
 import { resetFakeAsyncZone } from '@angular/core/testing';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-vehicle-list',
@@ -27,7 +28,7 @@ export class VehicleListComponent implements OnInit {
     { }
   ];
 
-  constructor(private vehicleService: VehicleService) { }
+  constructor(private vehicleService: VehicleService, private auth: AuthService) { }
 
   ngOnInit() {
     this.vehicleService.getMakes()
