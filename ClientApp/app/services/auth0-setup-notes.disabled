@@ -32,3 +32,25 @@ function (user, context, callback) {
 
   callback(null, user, context);
 }
+
+-------------------------------------------------------------------------------
+
+Assigning users to roles:
+
+in Users / Metadata:
+- user_metadata - data that users can set
+- app_metadata - e.g. user role
+{
+  "roles": ["Admin", "Moderator"]
+}
+
+Returning custom claims:
+- roles are not part of the OIDC so in order to return them to our client we need to put them in a namespace sth like vega.com/roles (unique so it won't clash with sth else)
+Rules / Create new rule / { empty }
+- Name: Add the roles claims
+function (user, context, callback) {
+  if (user.app_metadata && user.app_metadata.roles)
+    context.accessToken['http://vega.com/roles'] = user.app_metadata.roles;
+  
+  callback(null, user, context);
+}
