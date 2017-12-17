@@ -39,7 +39,8 @@
         redirectUrl: config.callbackURL,
         responseType: 'token id_token',
         params: {
-          audience: "http://api.vega.com"
+          audience: "http://api.vega.com",
+          scope: "openid email"
         }
       },
       assetsUrl:  config.assetsUrl,

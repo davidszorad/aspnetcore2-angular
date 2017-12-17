@@ -7,10 +7,14 @@ import { tokenNotExpired } from 'angular2-jwt';
 
 @Injectable()
 export class AuthService {
-
+  profile: any;
   lock = new Auth0Lock(AUTH_CONFIG.clientID, AUTH_CONFIG.domain, {});
 
-  constructor(public router: Router) {}
+  constructor(public router: Router) {
+    var profile = localStorage.getItem('profile');
+    if (profile)
+      this.profile = JSON.parse(profile);
+  }
 
   public login(): void {
     this.lock.show();
@@ -61,12 +65,21 @@ export class AuthService {
     //localStorage.setItem('token', authResult.idToken);
     localStorage.setItem('token', authResult.accessToken);
     //localStorage.setItem('expires_at', expiresAt);
+    this.lock.getUserInfo(authResult.accessToken, (error, profile) => {
+      if (error)
+        throw error;
+      
+      localStorage.setItem('profile', JSON.stringify(profile));
+      this.profile = profile;
+    });
   }
 
   public logout(): void {
     // Remove tokens and expiry time from localStorage
     //localStorage.removeItem('access_token');
     localStorage.removeItem('token');
+    localStorage.removeItem('profile');
+    this.profile = null;
     //localStorage.removeItem('expires_at');
     // Go back to the home route
     this.router.navigate(['/']);
