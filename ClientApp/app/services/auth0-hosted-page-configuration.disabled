@@ -37,7 +37,7 @@
     var lock = new Auth0Lock(config.clientID, config.auth0Domain, {
       auth: {
         redirectUrl: config.callbackURL,
-        responseType: 'token',
+        responseType: 'token id_token',
         params: config.internalOptions
       },
       assetsUrl:  config.assetsUrl,

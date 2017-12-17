@@ -3,22 +3,12 @@ import { AUTH_CONFIG } from './auth0-variables';
 import { Router, NavigationStart } from '@angular/router';
 import 'rxjs/add/operator/filter';
 import Auth0Lock from 'auth0-lock';
+import { tokenNotExpired } from 'angular2-jwt';
 
 @Injectable()
 export class AuthService {
 
-  lock = new Auth0Lock(AUTH_CONFIG.clientID, AUTH_CONFIG.domain, {
-    oidcConformant: true,
-    autoclose: true,
-    auth: {
-      redirectUrl: AUTH_CONFIG.callbackURL,
-      responseType: 'token id_token',
-      audience: `https://${AUTH_CONFIG.domain}/userinfo`,
-      params: {
-        scope: 'openid'
-      }
-    }
-  });
+  lock = new Auth0Lock(AUTH_CONFIG.clientID, AUTH_CONFIG.domain, {});
 
   constructor(public router: Router) {}
 
@@ -68,15 +58,15 @@ export class AuthService {
     // Set the time that the access token will expire at
     const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
     localStorage.setItem('access_token', authResult.accessToken);
-    localStorage.setItem('id_token', authResult.idToken);
-    localStorage.setItem('expires_at', expiresAt);
+    localStorage.setItem('token', authResult.idToken);
+    //localStorage.setItem('expires_at', expiresAt);
   }
 
   public logout(): void {
     // Remove tokens and expiry time from localStorage
     localStorage.removeItem('access_token');
-    localStorage.removeItem('id_token');
-    localStorage.removeItem('expires_at');
+    localStorage.removeItem('token');
+    //localStorage.removeItem('expires_at');
     // Go back to the home route
     this.router.navigate(['/']);
   }
@@ -84,13 +74,14 @@ export class AuthService {
   public isAuthenticated(): boolean {
     // Check whether the current time is past the
     // access token's expiry time
-    var expiresat = localStorage.getItem('expires_at');
-    if (expiresat) {
-      const expiresAt = JSON.parse(expiresat);
-      return new Date().getTime() < expiresAt;
-    } else {
-      return false;
-    }
+    // var expiresat = localStorage.getItem('expires_at');
+    // if (expiresat) {
+    //   const expiresAt = JSON.parse(expiresat);
+    //   return new Date().getTime() < expiresAt;
+    // } else {
+    //   return false;
+    // }
+    return tokenNotExpired('token');
   }
 
 }
