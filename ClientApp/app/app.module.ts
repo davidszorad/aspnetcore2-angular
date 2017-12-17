@@ -18,6 +18,7 @@ import { PaginationComponent } from './components/shared/pagination/pagination.c
 import { ViewVehicleComponent } from './components/view-vehicle/view-vehicle.component';
 import { PhotoService } from './services/photo.service';
 import { ProgressService, BrowserXhrWithProgressService } from './services/progress.service';
+import { AdminComponent } from './components/admin/admin.component';
 
 @NgModule({
     declarations: [
@@ -29,7 +30,8 @@ import { ProgressService, BrowserXhrWithProgressService } from './services/progr
         VehicleFormComponent,
         VehicleListComponent,
         PaginationComponent,
-        ViewVehicleComponent
+        ViewVehicleComponent,
+        AdminComponent
     ],
     imports: [
         CommonModule,
@@ -45,6 +47,7 @@ import { ProgressService, BrowserXhrWithProgressService } from './services/progr
             { path: 'vehicles/edit/:id', component: VehicleFormComponent },
             { path: 'vehicles/:id', component: ViewVehicleComponent },
             { path: 'vehicles', component: VehicleListComponent },
+            { path: 'admin', component: AdminComponent },
             { path: '**', redirectTo: 'home' }
         ])
     ],

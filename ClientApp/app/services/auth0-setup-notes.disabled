@@ -1,3 +1,8 @@
+params: {
+    "audience": "http://api.vega.com",  // the value equals to API / { our_api } / Settings -> Identifier (unique identifier)
+    "scope": "openid email profile"
+}
+
 Let me clarify something about the scope. 
 
 As I explained, when we set the audience property, Auth0 behaves in OIDC (OpenID Connect) compliant mode. In this mode, by default the scope is set to "openid". 

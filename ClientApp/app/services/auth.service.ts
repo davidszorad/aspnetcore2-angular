@@ -3,17 +3,23 @@ import { AUTH_CONFIG } from './auth0-variables';
 import { Router, NavigationStart } from '@angular/router';
 import 'rxjs/add/operator/filter';
 import Auth0Lock from 'auth0-lock';
-import { tokenNotExpired } from 'angular2-jwt';
+import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
 
 @Injectable()
 export class AuthService {
   profile: any;
+  private roles: string[] = [];
   lock = new Auth0Lock(AUTH_CONFIG.clientID, AUTH_CONFIG.domain, {});
 
   constructor(public router: Router) {
-    var profile = localStorage.getItem('profile');
-    if (profile)
-      this.profile = JSON.parse(profile);
+    this.readUserFromLocalStorage();
+  }
+
+  public isInRole(roleName: string) {
+    if (this.roles)
+      return this.roles.indexOf(roleName) > -1;
+
+    return false;
   }
 
   public login(): void {
@@ -63,14 +69,22 @@ export class AuthService {
     //const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
     //localStorage.setItem('access_token', authResult.accessToken);
     //localStorage.setItem('token', authResult.idToken);
-    localStorage.setItem('token', authResult.accessToken);
     //localStorage.setItem('expires_at', expiresAt);
+    
+    if (authResult.accessToken.length < 50) {
+      // dirty fix (sometimes after changing users auth0 user after login return authResult with short accessToken so in that case we use idToken; anyway even profile is not sent so we have to re-login again but this time the page is at least accessible; it doesn't happen with Google account)
+      // CODE BELOW SUCH AS >>jwtHelper.decodeToken(authResult.accessToken)<< AND >>this.lock.getUserInfo(authResult.accessToken<< MIGHT THROW AN ERROR IF THE ACCESSTOKEN IS SHORT AND DOES NOT CONTAIN NECCESSARY DATA
+      localStorage.setItem('token', authResult.idToken);
+    } else {
+      localStorage.setItem('token', authResult.accessToken);
+    }
+    
     this.lock.getUserInfo(authResult.accessToken, (error, profile) => {
       if (error)
         throw error;
       
-      localStorage.setItem('profile', JSON.stringify(profile));
-      this.profile = profile;
+      localStorage.setItem('profile', JSON.stringify(profile));      
+      this.readUserFromLocalStorage();
     });
   }
 
@@ -80,6 +94,7 @@ export class AuthService {
     localStorage.removeItem('token');
     localStorage.removeItem('profile');
     this.profile = null;
+    this.roles = [];
     //localStorage.removeItem('expires_at');
     // Go back to the home route
     this.router.navigate(['/']);
@@ -96,6 +111,19 @@ export class AuthService {
     //   return false;
     // }
     return tokenNotExpired('token');
+  }
+
+  private readUserFromLocalStorage() {
+    var profile = localStorage.getItem('profile');
+    if (profile)
+      this.profile = JSON.parse(profile);
+    
+    var token = localStorage.getItem('token');
+    if (token) {
+      var jwtHelper = new JwtHelper();
+      var decodedToken = jwtHelper.decodeToken(token);
+      this.roles = decodedToken['http://vega.com/roles']; //namespace we defined in custom rule
+    }
   }
 
 }
