@@ -12,19 +12,22 @@
         <div class='clearfix'></div>
         <div class='navbar-collapse collapse'>
             <ul class='nav navbar-nav'>
+                <li [routerLinkActive]="['link-active']">
+                    <a href="https://veganew.auth0.com/login?client=MWFEOJEznt7VApnQAxZWpTQfTqRVqUK4" *ngIf="!auth.isAuthenticated()">
+                        <span class='glyphicon glyphicon-user'></span> Login
+                    </a>
+                    <a (click)="auth.logout()" *ngIf="auth.isAuthenticated()">
+                        <span class='glyphicon glyphicon-user'></span> Logout
+                    </a>
+                </li>
                 <li [routerLinkActive]="['link-active']" [routerLinkActiveOptions]="{exact: true}">  <!-- routerLinkActiveOptions - without it all buttons with vehicles in url would be highlighted -->
                     <a [routerLink]="['/vehicles']">
                         <span class='glyphicon glyphicon-home'></span> Vehicles
                     </a>
                 </li>
-                <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/counter']">
-                        <span class='glyphicon glyphicon-education'></span> Counter
-                    </a>
-                </li>
-                <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/fetch-data']">
-                        <span class='glyphicon glyphicon-th-list'></span> Fetch data
+                <li [routerLinkActive]="['link-active']" *ngIf="auth.isInRole('Admin')">
+                    <a [routerLink]="['/admin']">
+                        <span class='glyphicon glyphicon-education'></span> Admin
                     </a>
                 </li>
                 <li [routerLinkActive]="['link-active']">

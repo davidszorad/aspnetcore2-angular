@@ -1,0 +1,76 @@
+params: {
+    "audience": "http://api.vega.com",  // the value equals to API / { our_api } / Settings -> Identifier (unique identifier)
+    "scope": "openid email profile"
+}
+
+Let me clarify something about the scope. 
+
+As I explained, when we set the audience property, Auth0 behaves in OIDC (OpenID Connect) compliant mode. In this mode, by default the scope is set to "openid". 
+
+The scope property determines what information (claims) we can access with this token. When the value of scope is "openid", that means we can get only the user's ID. 
+
+In the last lecture, we explicitly set the scope to "openid email". This means, in addition to the user's ID, we would like to access the user's email as well. This is the reason why we got the consent dialog for the second time. This dialog asked the user if we can access their email or not. 
+
+OpenID declares a set of standard claims that we can set as the value of the scope property. 
+
+https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims
+
+In a larger application, we can also define custom claims: 
+
+https://auth0.com/docs/scopes/current
+
+-------------------------------------------------------------------------------
+
+To be able to sign in with auth0 registered users we need to disable OIDC-conformant in Clients / {app name} / Settings / Advanced / OAuth
+
+-------------------------------------------------------------------------------
+
+To get user name (without it the name is set to the email):
+
+Rules / Create new rule / { Add country to user profile }
+
++ change it to:
+
+function (user, context, callback) {
+  if (user.user_metadata && user.user_metadata.name)
+    user.name = user.user_metadata.name;
+
+  callback(null, user, context);
+}
+
+-------------------------------------------------------------------------------
+
+Assigning users to roles:
+
+in Users / Metadata:
+- user_metadata - data that users can set
+- app_metadata - e.g. user role
+{
+  "roles": ["Admin", "Moderator"]
+}
+
+Returning custom claims:
+- roles are not part of the OIDC so in order to return them to our client we need to put them in a namespace sth like vega.com/roles (unique so it won't clash with sth else)
+Rules / Create new rule / { empty }
+- Name: Add the roles claims
+function (user, context, callback) {
+  if (user.app_metadata && user.app_metadata.roles)
+    context.accessToken['http://vega.com/roles'] = user.app_metadata.roles;
+  
+  callback(null, user, context);
+}
+
+-------------------------------------------------------------------------------
+
+CSRF ATTACKS:
+
+Is this application vulnerable to CSRF attacks?
+The short answer is: no! 
+
+We would be vulnerable to CSRF attacks if we used "cookies" as a persistent authentication mechanism. With this, a hacker can take the victim to a malicious website, and encourage them to click a button to receive some reward (e.g. some freebie). When the victim clicks this button, an HTTP request would be sent to one of our API endpoints. 
+
+As you should know, cookies are stored in the browser and are automatically sent with each request. From our application's point of view, we would receive a legitimate request with an authentication cookie in the header. So, with this technique, a hacker can execute actions on behalf of the victim without their knowledge. They can create new vehicles and update and delete existing ones! There will be absolutely no traces of the hacker (e.g. their username, IP address, etc) in the logs, because all requests are sent from the victim's browser.
+
+In this application, however, we are not using cookies as a persistent authentication mechanism. When the user authenticates, we store their JWT in the local storage. Unlike cookies, data in the local storage is not sent to the server automatically. We have to manually include the JWT in the requests, and we used the AuthHttp class to do that. 
+
+So, in the above example, if the hacker takes the user to a malicious website and encourages them to click a button, the POST request will not include the JWT in the request header. This would be the same as an anonymous user calling that endpoint, and of course, the Authorise attribute on our action would reject the request. 

@@ -4,6 +4,7 @@ import { AppModuleShared } from './app.module';
 import { AppComponent } from './components/app/app.component';
 import { AppErrorHandler } from './app.error-handler'; // it has to be in client app.module because if error happens on server toasty component that is used to display errors is not made to run on server will fail
 import { BrowserXhrWithProgressService } from './services/progress.service';
+import { AuthService } from './services/auth.service';
 
 @NgModule({
     bootstrap: [ AppComponent ],
@@ -13,7 +14,8 @@ import { BrowserXhrWithProgressService } from './services/progress.service';
     ],
     providers: [
         { provide: 'BASE_URL', useFactory: getBaseUrl },
-        { provide: ErrorHandler, useClass: AppErrorHandler }
+        { provide: ErrorHandler, useClass: AppErrorHandler },
+        AuthService
     ]
 })
 export class AppModule {

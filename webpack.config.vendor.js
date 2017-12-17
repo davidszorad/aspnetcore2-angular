@@ -14,6 +14,9 @@ const treeShakableModules = [
     '@angular/router'
 ];
 const nonTreeShakableModules = [
+    'auth0-js',
+    'auth0-lock',
+    'angular2-jwt',
     'bootstrap',
     'bootstrap/dist/css/bootstrap.css',
     'es6-promise',

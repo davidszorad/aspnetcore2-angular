@@ -3,10 +3,16 @@ import { VehicleService } from './../../services/vehicle.service';
 import { Component, OnInit, ElementRef, ViewChild, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PhotoService } from '../../services/photo.service';
-import { ProgressService } from '../../services/progress.service';
+import { ProgressService, BrowserXhrWithProgressService } from '../../services/progress.service';
+import { BrowserXhr } from '@angular/http';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
-  templateUrl: 'view-vehicle.component.html'
+  templateUrl: 'view-vehicle.component.html',
+  providers: [
+    { provide: BrowserXhr, useClass: BrowserXhrWithProgressService },
+    ProgressService
+  ]
 })
 export class ViewVehicleComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef; // ViewChild decorator -> for referencing #fileInput template variable
@@ -16,7 +22,8 @@ export class ViewVehicleComponent implements OnInit {
   vehicleId: number; 
 
   constructor(
-    private route: ActivatedRoute, 
+    private route: ActivatedRoute,
+    private auth: AuthService,
     private router: Router,
     private photoService: PhotoService,
     private progressService: ProgressService,

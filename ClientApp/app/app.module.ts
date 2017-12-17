@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpModule, BrowserXhr } from '@angular/http';
+import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { ToastyModule } from 'ng2-toasty';
 
@@ -17,7 +17,10 @@ import { HelpersService } from './services/helpers.service';
 import { PaginationComponent } from './components/shared/pagination/pagination.component';
 import { ViewVehicleComponent } from './components/view-vehicle/view-vehicle.component';
 import { PhotoService } from './services/photo.service';
-import { ProgressService, BrowserXhrWithProgressService } from './services/progress.service';
+import { AdminComponent } from './components/admin/admin.component';
+import { AuthGuardService } from './services/auth-guard.service';
+import { AdminAuthGuardService } from './services/admin-auth-guard.service';
+import { AUTH_PROVIDERS } from 'angular2-jwt';
 
 @NgModule({
     declarations: [
@@ -29,7 +32,8 @@ import { ProgressService, BrowserXhrWithProgressService } from './services/progr
         VehicleFormComponent,
         VehicleListComponent,
         PaginationComponent,
-        ViewVehicleComponent
+        ViewVehicleComponent,
+        AdminComponent
     ],
     imports: [
         CommonModule,
@@ -41,18 +45,20 @@ import { ProgressService, BrowserXhrWithProgressService } from './services/progr
             { path: 'home', component: HomeComponent },
             { path: 'counter', component: CounterComponent },
             { path: 'fetch-data', component: FetchDataComponent },
-            { path: 'vehicles/new', component: VehicleFormComponent },
-            { path: 'vehicles/edit/:id', component: VehicleFormComponent },
+            { path: 'vehicles/new', component: VehicleFormComponent, canActivate: [ AuthGuardService ] },
+            { path: 'vehicles/edit/:id', component: VehicleFormComponent, canActivate: [ AuthGuardService ] },
             { path: 'vehicles/:id', component: ViewVehicleComponent },
             { path: 'vehicles', component: VehicleListComponent },
+            { path: 'admin', component: AdminComponent, canActivate: [ AdminAuthGuardService ] },
             { path: '**', redirectTo: 'home' }
         ])
     ],
     providers: [
-        { provide: BrowserXhr, useClass: BrowserXhrWithProgressService },
+        AdminAuthGuardService,
+        AuthGuardService,
+        AUTH_PROVIDERS,
         HelpersService,
         PhotoService,
-        ProgressService,
         VehicleService
     ]
 })
