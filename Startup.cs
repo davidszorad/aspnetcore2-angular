@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using veganew.Controllers;
 using veganew.Core;
 using veganew.Core.Models;
 using veganew.Persistance;
@@ -49,6 +50,10 @@ namespace veganew
             {
                 options.Authority = "https://veganew.auth0.com/";
                 options.Audience = "http://api.vega.com";
+            });
+
+            services.AddAuthorization(options => {
+                options.AddPolicy(Policies.RequireAdminRole, policy => policy.RequireClaim("http://vega.com/roles", "Admin"));
             });
         }
 
