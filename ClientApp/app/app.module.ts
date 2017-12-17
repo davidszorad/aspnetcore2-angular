@@ -19,6 +19,8 @@ import { ViewVehicleComponent } from './components/view-vehicle/view-vehicle.com
 import { PhotoService } from './services/photo.service';
 import { ProgressService, BrowserXhrWithProgressService } from './services/progress.service';
 import { AdminComponent } from './components/admin/admin.component';
+import { AuthGuardService } from './services/auth-guard.service';
+import { AdminAuthGuardService } from './services/admin-auth-guard.service';
 
 @NgModule({
     declarations: [
@@ -47,7 +49,7 @@ import { AdminComponent } from './components/admin/admin.component';
             { path: 'vehicles/edit/:id', component: VehicleFormComponent },
             { path: 'vehicles/:id', component: ViewVehicleComponent },
             { path: 'vehicles', component: VehicleListComponent },
-            { path: 'admin', component: AdminComponent },
+            { path: 'admin', component: AdminComponent, canActivate: [ AdminAuthGuardService ] },
             { path: '**', redirectTo: 'home' }
         ])
     ],
@@ -56,7 +58,9 @@ import { AdminComponent } from './components/admin/admin.component';
         HelpersService,
         PhotoService,
         ProgressService,
-        VehicleService
+        VehicleService,
+        AuthGuardService,
+        AdminAuthGuardService
     ]
 })
 export class AppModuleShared {
