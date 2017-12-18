@@ -16,6 +16,9 @@ export class AuthService {
   }
 
   public isInRole(roleName: string) {
+    if (!this.isAuthenticated)
+      return false;
+    
     if (this.roles)
       return this.roles.indexOf(roleName) > -1;
 

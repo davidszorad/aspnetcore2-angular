@@ -506,6 +506,11 @@
       "from": "amdefine@>=0.0.4",
       "resolved": "https://registry.npmjs.org/amdefine/-/amdefine-1.0.1.tgz"
     },
+    "angular2-chartjs": {
+      "version": "0.4.1",
+      "from": "angular2-chartjs@latest",
+      "resolved": "https://registry.npmjs.org/angular2-chartjs/-/angular2-chartjs-0.4.1.tgz"
+    },
     "angular2-jwt": {
       "version": "0.2.3",
       "from": "angular2-jwt@latest",
@@ -1190,6 +1195,28 @@
       "from": "charenc@>=0.0.1 <0.1.0",
       "resolved": "https://registry.npmjs.org/charenc/-/charenc-0.0.2.tgz",
       "dev": true
+    },
+    "chart.js": {
+      "version": "2.7.1",
+      "from": "chart.js@latest",
+      "resolved": "https://registry.npmjs.org/chart.js/-/chart.js-2.7.1.tgz"
+    },
+    "chartjs-color": {
+      "version": "2.2.0",
+      "from": "chartjs-color@>=2.2.0 <2.3.0",
+      "resolved": "https://registry.npmjs.org/chartjs-color/-/chartjs-color-2.2.0.tgz",
+      "dependencies": {
+        "color-convert": {
+          "version": "0.5.3",
+          "from": "color-convert@>=0.5.3 <0.6.0",
+          "resolved": "https://registry.npmjs.org/color-convert/-/color-convert-0.5.3.tgz"
+        }
+      }
+    },
+    "chartjs-color-string": {
+      "version": "0.5.0",
+      "from": "chartjs-color-string@>=0.5.0 <0.6.0",
+      "resolved": "https://registry.npmjs.org/chartjs-color-string/-/chartjs-color-string-0.5.0.tgz"
     },
     "check-error": {
       "version": "1.0.2",
@@ -4834,6 +4861,11 @@
       "version": "0.5.1",
       "from": "mkdirp@>=0.5.1 <0.6.0",
       "resolved": "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.1.tgz"
+    },
+    "moment": {
+      "version": "2.18.1",
+      "from": "moment@>=2.18.0 <2.19.0",
+      "resolved": "https://registry.npmjs.org/moment/-/moment-2.18.1.tgz"
     },
     "move-concurrently": {
       "version": "1.0.1",
