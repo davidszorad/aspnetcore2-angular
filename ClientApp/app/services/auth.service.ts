@@ -125,7 +125,7 @@ export class AuthService {
     if (token) {
       var jwtHelper = new JwtHelper();
       var decodedToken = jwtHelper.decodeToken(token);
-      this.roles = decodedToken['http://vega.com/roles']; //namespace we defined in custom rule
+      this.roles = decodedToken['http://vega.com/roles'] || []; //namespace we defined in custom rule
     }
   }
 
