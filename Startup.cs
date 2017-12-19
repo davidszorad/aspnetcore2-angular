@@ -34,6 +34,7 @@ namespace veganew
             services.AddScoped<IPhotoRepository, PhotoRepository>();
             services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<IPhotoService, IPhotoService>();
             
             services.AddAutoMapper();
             
