@@ -21,6 +21,7 @@ import { AdminComponent } from './components/admin/admin.component';
 import { AuthGuardService } from './services/auth-guard.service';
 import { AdminAuthGuardService } from './services/admin-auth-guard.service';
 import { AUTH_PROVIDERS } from 'angular2-jwt';
+import { ChartModule } from 'angular2-chartjs';
 
 @NgModule({
     declarations: [
@@ -40,6 +41,7 @@ import { AUTH_PROVIDERS } from 'angular2-jwt';
         HttpModule,
         ToastyModule.forRoot(),
         FormsModule,
+        ChartModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'vehicles', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },

@@ -16,6 +16,9 @@ export class AuthService {
   }
 
   public isInRole(roleName: string) {
+    if (!this.isAuthenticated)
+      return false;
+    
     if (this.roles)
       return this.roles.indexOf(roleName) > -1;
 
@@ -122,7 +125,7 @@ export class AuthService {
     if (token) {
       var jwtHelper = new JwtHelper();
       var decodedToken = jwtHelper.decodeToken(token);
-      this.roles = decodedToken['http://vega.com/roles']; //namespace we defined in custom rule
+      this.roles = decodedToken['http://vega.com/roles'] || []; //namespace we defined in custom rule
     }
   }
 

@@ -14,6 +14,7 @@ using veganew.Controllers;
 using veganew.Core;
 using veganew.Core.Models;
 using veganew.Persistance;
+using veganew.Services;
 
 namespace veganew
 {
@@ -34,10 +35,12 @@ namespace veganew
             services.AddScoped<IPhotoRepository, PhotoRepository>();
             services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<IPhotoService, PhotoService>();
+            services.AddTransient<IPhotoStorage, FileSystemPhotoStorage>();
             
             services.AddAutoMapper();
             
-            services.AddDbContext<VegaDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));  // Configuration["ConnectionStrings:Default"]
+            services.AddDbContext<VegaDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));  // Configuration["ConnectionStrings:Default"]  OR TO READ IT FROM THE SECRET MANAGER: Configuration["MySecret"] -> Configuration["ConnectionStrings:Default"]
             
             services.AddMvc();
 
