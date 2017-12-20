@@ -23,7 +23,7 @@ namespace veganew.Services
             vehicle.Photos.Add(photo);
             await unitOfWork.CompleteAsync();
 
-            // TODO: notificationSender.Send(...);
+            // TODO: notificationSender.Send(...);  -- Advanced C# Course (events?)
 
             return photo;
         }
